@@ -1,5 +1,8 @@
 import re, sys, os
 
+
+
+
 directory = sys.argv[1]
 
 title_search = re.compile(r'(title:\s*)(?P<title>.*\s*.*)', re.IGNORECASE)
