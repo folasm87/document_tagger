@@ -22,14 +22,14 @@ def compile_kw():
         searches[kw] = re.compile(r'\b' + kw + r'\b', re.IGNORECASE)
     return searches
 
-def count_kw(searches, full_text):
-    title_search = re.compile(r'(title:\s*)(?P<title>.*)', re.IGNORECASE)
-    title = re.search(title_search, full_text).group('title')
+def count_kw(full_text, title, searches):
+    #title_search = re.compile(r'(title:\s*)(?P<title>.*)', re.IGNORECASE)
+    #title = re.search(title_search, full_text).group('title')
     print "Here's the keyword info for {}:".format(title)
     for search in searches:
         print "\"{0}\": {1}".format(search, len(re.findall(searches[search], full_text)))
 
-def get_metadata(full_text):
+def get_metadata(full_text, searches):
     title_search = re.compile(r'(title:\s*)(?P<title>.*\s*.*)', re.IGNORECASE)
     author_search = re.compile(r'(author:)(?P<author>.*)', re.IGNORECASE)
     translator_search = re.compile(r'(translator:)(?P<translator>.*)', re.IGNORECASE)
@@ -47,20 +47,22 @@ def get_metadata(full_text):
         illustrator = illustrator.group('illustrator')
 
     print "***" * 25
-    print "Here's the metadata for {}:".format(title)
-    #print "Title:  {}".format(title)
+    print "Title:  {}".format(title)
     print "Author(s): {}".format(author)
     print "Translator(s): {}".format(translator)
     print "Illustrator(s): {}".format(illustrator)
+    print "---" * 25
     print '{0} is {1} characters long'.format(title, len(full_text))
-    print "\n"
+    print "---" * 25
+    count_kw(full_text, title, searches)
+   
     
 def main(argv=sys.argv):
     docs = open_files()
     keywords = compile_kw()
     for doc in docs:
-        get_metadata(doc)
-        count_kw(keywords, doc)
+        get_metadata(doc, keywords)
+        #count_kw(keywords, doc)
 
 
 
